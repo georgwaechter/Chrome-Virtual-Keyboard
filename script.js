@@ -160,6 +160,22 @@ function virtualKeyboardChromeExtension_click(key, skip) {
 						virtualKeyboardChromeExtensionClickedElem.value = virtualKeyboardChromeExtensionClickedElem.value.substr(0, pos)+"\n"+virtualKeyboardChromeExtensionClickedElem.value.substr(posEnd);
 						virtualKeyboardChromeExtensionClickedElem.selectionStart = pos+1;
 						virtualKeyboardChromeExtensionClickedElem.selectionEnd = pos+1;
+
+						var keyboardEvent = document.createEvent("KeyboardEvent");
+						var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
+						keyboardEvent[initMethod](
+						   "keydown", // event type : keydown, keyup, keypress
+							true, // bubbles
+							true, // cancelable
+							window, // viewArg: should be window
+							false, // ctrlKeyArg
+							false, // altKeyArg
+							false, // shiftKeyArg
+							false, // metaKeyArg
+							13, // keyCodeArg : unsigned long the virtual key code, else 0
+							0 // charCodeArgs : unsigned long the Unicode character associated with the depressed key, else 0
+						);
+						virtualKeyboardChromeExtensionClickedElem.dispatchEvent(keyboardEvent);
 					} else {
 					
 						var form  = virtualKeyboardChromeExtension_getParentByTagName(virtualKeyboardChromeExtensionClickedElem, "form");
